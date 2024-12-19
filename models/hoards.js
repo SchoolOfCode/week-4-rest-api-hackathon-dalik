@@ -1,4 +1,6 @@
 //helper functions are here
 import { data } from "../libs/coins.js";
 
-console.log(data);
+export async function getHoards() {
+  return data;
+}

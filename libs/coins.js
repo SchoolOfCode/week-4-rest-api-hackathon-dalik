@@ -1,4 +1,4 @@
-export const data = [
+export let data = [
   {
     id: 1175211,
     uri: "https://finds.org.uk/database/artefacts/record/id/1175211",

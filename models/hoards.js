@@ -25,3 +25,11 @@ export async function getHoardsByCounty(county) {
 //       );
 //     });
 //   }
+
+export async function createHoard(newHoard) {
+  //take newHoard param
+  console.log(newHoard);
+  data.push(newHoard);
+  //   const createdHoard = "look at this hoard";
+  return newHoard;
+}

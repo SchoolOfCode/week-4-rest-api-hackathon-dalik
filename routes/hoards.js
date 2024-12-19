@@ -12,6 +12,17 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const createdHoard = await createHoard(req.body);
-  res.send(createdHoard);
+  try {
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).json({ success: false });
+    }
+    const createdHoard = await createHoard(req.body);
+    res.json({ success: true, payload: createdHoard });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+
+  //   if (!req.body || Object.keys(req.body).length === 0) {
+  //     return res.status(400).json({ success: false });
+  //   }
 });

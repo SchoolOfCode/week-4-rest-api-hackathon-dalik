@@ -1,25 +1,52 @@
 //routes are defined here
 import express from "express";
 
-import { getHoards, createHoard, getHoardsByCounty } from "../models/hoards.js";
+import {
+  getHoards,
+  createHoard,
+  getHoardsByCounty,
+  getHoardById,
+} from "../models/hoards.js";
 
 const router = express.Router();
 export default router;
-/* OLD WORKING GET for ALL
-router.get("/", async (req, res) => {
-  const hoards = await getHoards();
-  res.json(hoards);
+
+// endpoint for returning by ID
+router.get("/:id", async (req, res) => {
+  console.log("Got into the id route");
+  try {
+    const hoard = await getHoardById(req.params.id);
+
+    console.log("got back a hoard:");
+    console.log(hoard);
+
+    if (!hoard) {
+      return res.status(404).json({ success: false });
+    }
+
+    return res.json({
+      success: true,
+      payload: hoard,
+    });
+
+    // point out to Kim how this differs from our astronauts solution, where we did separate res.json and return statements, which got messy in terms of exiting function
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 });
-*/
 
 router.get("/", async (req, res) => {
   try {
     const { county } = req.query;
+    console.log("checking for a county query");
     console.log(county);
     if (!county) {
       // no county query was sent, so return all the records:
       const hoards = await getHoards();
-      res.json({
+      return res.json({
         success: true,
         payload: hoards,
       });
@@ -33,24 +60,11 @@ router.get("/", async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message,
+      //message: error.message,
+      message: "trying to send county",
     });
   }
 });
-
-//   try {
-//     const { name } = req.query;
-//     console.log(name);
-//     if (!name) {
-//       const astronauts = await getAstronauts();
-//       return res.json({ success: true, payload: astronauts });
-//     }
-//     const astronauts = await getAstronautsByName(name);
-//     res.json({ success: true, payload: astronauts });
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: error.message });
-//   }
-// });
 
 router.post("/", async (req, res) => {
   try {
@@ -62,8 +76,4 @@ router.post("/", async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
-
-  //   if (!req.body || Object.keys(req.body).length === 0) {
-  //     return res.status(400).json({ success: false });
-  //   }
 });
